@@ -9,7 +9,8 @@
 
 | Componente | Estado | Última actualización |
 |---|---|---|
-| Plan definido | ✅ Completado (optimizado) | 2026-07-18 |
+| Plan definido | ✅ Completado (optimizado para 3.9 GB RAM) | 2026-07-18 |
+| Fase 0: Bootstrap lab | ✅ Completado | 2026-07-18 |
 | Fase 1: Docker Lab + Scripted | ⏳ Pendiente | — |
 | Fase 2: Tabletop / Physical Drills | ⏳ Pendiente | — |
 | Fase 3: Informe Consolidado | ⏳ Pendiente | — |
@@ -38,8 +39,18 @@ SGSI/
 ├── Copia de Politicas.xlsx       # 5 Políticas Base del SGSI
 ├── ISO-27001.md                  # Referencia normativa
 ├── TecnoGlobal.md                # Contexto organizacional
-├── .agents/skills/               # Skills cargables por la IA
-└── SIMULACION_SGSI_TecnoGlobal.md # ← ESTE ARCHIVO (vivo)
+├── SIMULACION_SGSI_TecnoGlobal.md # ← ESTE ARCHIVO (vivo)
+├── lab/
+│   ├── docker-compose.yml        # 8 contenedores optimizados (3.9 GB RAM)
+│   ├── .env                      # Credenciales del laboratorio
+│   ├── configs/nginx-vuln/       # Nginx con vulns intencionales
+│   ├── scripts/
+│   │   ├── check-logs.sh         # SIEM lightweight (reemplaza ES+Kibana+Wazuh)
+│   │   └── attacks/              # 10 grupos de ataque por contenedor objetivo
+│   ├── data/                     # Datos semilla para Odoo, LDAP, Postgres, etc.
+│   └── siem/SIEM-LIGHTWEIGHT.md  # Justificación del SIEM ligero
+├── evidencias/                   # Outputs de cada simulación
+└── .agents/skills/               # Skills cargables por la IA
 ```
 
 ---
@@ -50,10 +61,23 @@ Las 50 amenazas se abordan con **2 modalidades** (Scripted Attacks absorbida den
 
 | Modalidad | Cobertura | Activos | Nº amenazas |
 |---|---|---|---|
-| **A — Laboratorio Docker + Scripted** | Amenazas técnicas digitales + explotación desde Kali | HW (1-10), SW (1-10), IF (1-10, excepto IF-05) | ~21 |
+| **A — Laboratorio Docker + Scripted** | Amenazas técnicas digitales + explotación desde host Kali | HW (1-10), SW (1-10), IF (1-10, excepto IF-05) | ~21 |
 | **B — Tabletop / Physical Drills** | Amenazas físicas y de factor humano | FS (1-10), RH (1-10) | ~12 |
 
 **Total simulaciones únicas:** ~33 (optimizado — fusiones de escenarios redundantes y eliminación de simulación administrativa IF-05)
+
+### Optimización por recursos (Fase 0)
+
+El host Kali dispone de **3.9 GB RAM libre**. Un SIEM completo (Elasticsearch+Kibana+Wazuh) consume ~2.5 GB. Se aplica:
+
+| Optimización | Ahorro RAM | Consecuencia |
+|---|---|---|
+| A — Quitar Elasticsearch + Kibana + Wazuh | ~2.5 GB | SIEM lightweight basado en volumen compartido + `check-logs.sh` |
+| C — Kali-attacker desde host (sin contenedor) | ~500 MB | Herramientas instaladas en host Kali (`nmap`, `hydra`, `sqlmap`, `metasploit-framework`) |
+| D — Fusionar Postgres ERP + CCTV (1 server, 2 BD) | ~200 MB | `POSTGRES_MULTIPLE_DATABASES=postgres_cctv` |
+| E — Gophish desde host (sin contenedor separado) | ~50 MB | Script de phishing en Kali |
+
+**Resultado:** 8 contenedores Docker (~1.65 GB) en vez de 12 originalmente (~5 GB). Sobran ~2.2 GB para margen del host.
 
 ### Reglas del archivo vivo
 
@@ -66,82 +90,201 @@ Las 50 amenazas se abordan con **2 modalidades** (Scripted Attacks absorbida den
 
 ## 📦 3. FASE 1 — Laboratorio Docker (Infraestructura Técnica)
 
-### 3.1 Topología del Lab
+### 3.1 Topología del Lab — 8 contenedores (~1.65 GB RAM)
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                     DOCKER NETWORK                       │
-│                                                          │
-│  ┌──────────┐   ┌──────────┐   ┌──────────────────┐     │
-│  │  Kali     │   │  Odoo    │   │  PostgreSQL       │     │
-│  │ (attacker)│──▶│ (ERP)    │──▶│  (BD Odoo)        │     │
-│  └──────────┘   └──────────┘   └──────────────────┘     │
-│       │                                                  │
-│       ▼                                                  │
-│  ┌─────────────────────────────────────────────────┐     │
-│  │  SIEM Layer (Elasticsearch + Kibana + Wazuh)     │     │
-│  │  Recibe logs de todos los contenedores           │     │
-│  └─────────────────────────────────────────────────┘     │
-│                                                          │
-│  ┌──────────┐   ┌──────────┐   ┌──────────────────┐     │
-│  │  Minio   │   │  Nginx-  │   │  LDAP/            │     │
-│  │ (NAS sim)│   │  vuln    │   │  Simula-VPN       │     │
-│  └──────────┘   └──────────┘   └──────────────────┘     │
-│                                                          │
-│  ┌──────────┐   ┌──────────┐   ┌──────────────────┐     │
-│  │  MariaDB │   │  MongoDB │   │  Certbot          │     │
-│  │(invent.)│   │ (nómina) │   │  (SSL sim)        │     │
-│  └──────────┘   └──────────┘   └──────────────────┘     │
-└─────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────┐
+│                   DOCKER NETWORK                          │
+│            subnet: 172.28.0.0/16                          │
+│                                                           │
+│ ┌──────────┐    ┌──────────┐    ┌──────────────────┐     │
+│ │  Odoo    │───▶│ Postgres │    │  Nginx-vuln      │     │
+│ │ (ERP)    │    │ (ERP+CCTV│◀───│  (router/fw sim) │     │
+│ └──────────┘    │  1 server│    └──────────────────┘     │
+│                  │  2 BDs)  │           ▲                 │
+│                  └──────────┘           │                 │
+│       │                                  │                 │
+│       ▼                                  │                 │
+│ ┌────────────────────────────┐          │                 │
+│ │  Volumen: sgsi-logs         │          │                 │
+│ │  (SIEM lightweight — logs)  │◀──────┘                 │
+│ │  Revisión con check-logs.sh │                          │
+│ └────────────────────────────┘                           │
+│       ▲              ▲            ▲            ▲          │
+│       │              │            │            │          │
+│ ┌──────────┐ ┌──────────┐  ┌──────────┐ ┌─────────────┐  │
+│ │  Minio   │ │  LDAP    │  │ MariaDB  │ │  MongoDB    │  │
+│ │ (NAS sim)│ │ (ident.) │  │ (stock)  │ │  (nómina)   │  │
+│ └──────────┘ └──────────┘  └──────────┘ └─────────────┘  │
+│                                                           │
+│       │                                                   │
+│       ▼                                                   │
+│ ┌──────────┐                                              │
+│ │ Certbot  │                                              │
+│ │ (SSL sim)│                                              │
+│ └──────────┘                                              │
+└──────────────────────────────────────────────────────────┘
+                              ▲
+                              │
+                  ┌──────────────────────┐
+                  │  HOST KALI (opencode) │
+                  │  herramientas:        │
+                  │  nmap, hydra, sqlmap, │
+                  │  metasploit, tcpdump, │
+                  │  mongosh, psql, jq    │
+                  └──────────────────────┘
 ```
 
-### 3.2 Servicios y Activos Emulados
+### 3.2 Servicios y Activos Emulados — 8 contenedores + host Kali
 
-| Servicio Docker | Activo real | Propósito |
-|---|---|---|
-| `odoo` | SW-01 ERP Odoo v16 | Sistema crítico de gestión |
-| `postgres-erp` | SW-06 PostgreSQL v14 | Base de datos del ERP |
-| `nginx-vuln` | HW-02/HW-03 (router/firewall sim) | Punto de entrada perimetral |
-| `postgres-cctv` | IF-02 BD contraseñas CCTV | Datos sensibles de clientes |
-| `minio` | HW-05 NAS Synology | Almacenamiento de backups |
-| `ldap-server` | SW-07 VPN FortiClient sim | Gestión de identidades |
-| `mariadb-inventario` | IF-09 Inventario stock | Base de inventario |
-| `mongodb-nomina` | IF-10 Nómina y cuentas | Datos payroll |
-| `elasticsearch` + `kibana` | Política 5 (SIEM) | Centralización de logs |
-| `wazuh` | Política 5 (EDR/HIDS) | Detección de amenazas |
-| `certbot` | IF-08 SSL/TLS | Certificado digital |
-| `kali-attacker` | — | Orquesta ataques (Hydra, SQLmap, Metasploit, nmap) |
+| Servicio Docker | Activo real | Propósito | RAM est. |
+|---|---|---|---|
+| `odoo` | SW-01 ERP Odoo v16 | Sistema crítico de gestión | ~500 MB |
+| `postgres-erp` | SW-06 PostgreSQL v14 + IF-02 CCTV | BD ERP + BD CCTV (mismo server) | ~350 MB |
+| `nginx-vuln` | HW-02, HW-03, SW-02, SW-04, HW-09, SW-05, IF-07 | Punto entrada perimetral | ~50 MB |
+| `ldap-server` | SW-07 VPN + HW-08, HW-10, SW-08 | Gestión de identidades | ~100 MB |
+| `mariadb-inventario` | IF-09 Inventario stock | Base de inventario | ~200 MB |
+| `mongodb-nomina` | IF-10 Nómina y cuentas | Datos payroll | ~300 MB |
+| `minio` | HW-05 NAS + IF-06 backups | Almacenamiento S3 simulado | ~100 MB |
+| `certbot` | IF-08 SSL/TLS | Certificado digital | ~50 MB |
+| `sgsi-logs` (volumen) | P5 — Logging | SIEM lightweight (logs centralizados) | ~50 MB |
+| **Host Kali** | — | Orquesta ataques (nmap, hydra, sqlmap, metasploit, tcpdump) | 0 (host) |
+| **Gophish** (host Kali) | SW-10, RH-06 | Phishing controlado desde host | 0 (host) |
 
-### 3.3 Mapeo Amenaza → Docker → Script
+### 3.3 Agrupación de Simulaciones por Contenedor Objetivo
 
-| ID | Amenaza | Activo Docker | Script de ataque | Control a validar |
-|---|---|---|---|---|---|
-| HW-01 | Fallo crítico de hardware ERP | `odoo` | `docker stop odoo` + `restore-backup.sh` + medir RTO/RPO | A.8.13, A.8.14, A.5.30 |
-| HW-02+03 | Compromiso perimetral + evasión firewall | `nginx-vuln` | `nmap -sV -p-` + `metasploit` + curl bypass WAF + validar actualización reglas desde feed IoCs | A.8.20, A.8.22, A.8.5, A.5.7 |
-| HW-04 | VLAN hopping / salto VLAN | Red Docker | `macof` / `yersinia` simulado | A.8.20, A.8.22 |
-| HW-05 | Pérdida irrecuperable backups | `minio` | `simulate-ransomware.sh` (borra/encrypta) | A.8.13, A.8.14 |
-| HW-06 | Robo laptop gerencia | `odoo` (datos) | Simular acceso desde IP externa tras robo | A.6.7, A.8.24, A.8.7 |
-| HW-07 | Borrado grabaciones NVR | `nginx-vuln` | Borrar logs/snapshots en storage | A.8.13, A.8.15, A.8.5 |
-| HW-08+10 | Compromiso credenciales tablet + smartphone | `ldap-server` | `hydra -l user -P rockyou.txt ldap-server` + login desde ubicación anómala | A.6.7, A.8.24, A.8.1 |
-| HW-09 | Fuga datos impresora | `nginx-vuln` (spool) | Simular captura de documento en cola | A.8.24 |
-| SW-01 | Acceso no autorizado ERP | `odoo` | `sqlmap -u http://odoo:8069 --dump-all` | A.8.15, A.8.24, A.8.5 |
-| SW-02+05 | Intercepción video + exposición datos Zendesk | `nginx-vuln` (RTSP sim + API key) | Capturar stream con ffplay/tcpdump + fuga de API token | A.5.23, A.8.5 |
-| SW-03 | Fuga planos AutoCAD | `odoo` (file share) | `curl -O` archivos restringidos sin auth | A.8.1, A.8.15 |
-| SW-04 | Fuerza bruta Windows Server | `nginx-vuln` (RDP sim) | `hydra -l admin -P rockyou.txt rdp://nginx-vuln` + validar política de contraseñas | A.8.15, A.8.24, A.8.5, A.5.17 |
-| SW-06 | Inyección SQL PostgreSQL | `postgres-erp` | `sqlmap -d postgresql://... --dump` + validar reglas WAF contra IoCs | A.8.15, A.8.24, A.8.20, A.5.7 |
-| SW-07 | Abuso VPN acceso interno | `ldap-server` | Reutilizar credenciales robadas + test de provisión/desactivación de cuentas | A.8.1, A.8.15, A.8.5, A.5.16 |
-| SW-08 | Alteración registros asistencia | `ldap-server` | Modificar entrada LDAP de horario | A.8.1, A.8.15 |
-| SW-09 | Seguimiento GPS no autorizado | — | Tabla de trazabilidad (API call sim) | A.8.1, A.8.15 |
-| SW-10 | Suplantación identidad M365 | `gophish` + `mailhog` | Campaña de phishing controlada | A.5.23, A.8.5 |
-| IF-01 | Fuga planos seguridad clientes | `nginx-vuln` (repo) | Acceso a repositorio compartido sin ACL | A.5.12, A.8.3 |
-| IF-02 | Acceso a BD IP/contraseñas | `postgres-cctv` | SQLi + dump tablas credenciales | A.8.24, A.8.3 |
-| IF-03 | Exfiltración biométrica | `kali-attacker` | `curl` a API REST sin cifrado — extraer datos biométricos | A.5.34 |
-| IF-04 | Fraude facturación | `kali-attacker` | `psql` directo a BD facturación sin MFA | A.8.2 |
-| IF-06 | Ransomware sobre backups | `minio` | Script que simula cifrado + validar RTO/RPO de recuperación | A.8.13, A.8.22, A.5.30 |
-| IF-07 | Borrado de logs VPN | `elasticsearch` | `curl -X DELETE "es:9200/logs-*"` sin auth | A.8.15 |
-| IF-08 | Expiración SSL sin aviso | `certbot` | Detener renovación + mostrar error TLS | A.8.24, A.8.16 |
-| IF-09 | Alteración inventario stock | `mariadb-inventario` | `UPDATE stock SET cantidad=0 WHERE id=X` | A.8.3, A.8.15 |
-| IF-10 | Exposición nómina y cuentas | `kali-attacker` | `mongodump` a MongoDB nómina sin autenticación | A.8.11 |
+Para optimizar la ejecución, las 21 simulaciones técnicas de Fase 1 se agrupan por **contenedor objetivo** en lugar de por categoría de activo. Esto minimiza paradas y arranques, y permite validar familias de controles en una sola pasada.
+
+#### Grupo 1 — nginx-vuln (perímetro + endpoints expuestos)
+
+7 simulaciones atacan el mismo contenedor `nginx-vuln`. Se ejecutan en una sola sesión:
+
+| ID | Amenaza | Script | Controles |
+|---|---|---|---|
+| HW-02+03 | Compromiso perimetral + evasión firewall | `nmap -sV -p-` + Metasploit + curl bypass WAF + validar feed IoCs | A.8.20, A.8.22, A.8.5, A.5.7 |
+| HW-07 | Borrado grabaciones NVR | Borrar logs/snapshots en storage | A.8.13, A.8.15, A.8.5 |
+| HW-09 | Fuga datos impresora | Captura de documento en cola /print/ | A.8.24 |
+| SW-04 | Fuerza bruta Windows Server | `hydra -l admin -P rockyou.txt rdp://nginx-vuln` + validar política contraseñas | A.8.15, A.8.24, A.8.5, A.5.17 |
+| SW-02+05 | Intercepción video + exposición Zendesk | Capturar stream RTSP + fuga API token via /api/ | A.5.23, A.8.5 |
+| IF-01 | Fuga planos seguridad clientes | Acceso a repositorio /repo sin ACL | A.5.12, A.8.3 |
+| IF-07 | Borrado de logs VPN | `curl -X DELETE "http://nginx-vuln/logs-*"` sin auth | A.8.15 |
+
+**Script orquestador:** `lab/scripts/attacks/grupo1-nginx-vuln.sh`
+
+#### Grupo 2 — odoo (ERP crítico)
+
+4 simulaciones tienen como objetivo el ERP Odoo:
+
+| ID | Amenaza | Script | Controles |
+|---|---|---|---|
+| HW-01 | Fallo crítico hardware ERP | `docker stop odoo` + `restore-backup.sh` + medir RTO/RPO | A.8.13, A.8.14, A.5.30 |
+| HW-06 | Robo laptop gerencia | Acceso desde IP externa a endpoint Odoo | A.6.7, A.8.24, A.8.7 |
+| SW-01 | Acceso no autorizado ERP | `sqlmap -u http://odoo:8069 --dump-all` | A.8.15, A.8.24, A.8.5 |
+| SW-03 | Fuga planos AutoCAD | `curl -O` archivos restringidos sin auth | A.8.1, A.8.15 |
+
+**Script orquestador:** `lab/scripts/attacks/grupo2-odoo.sh`
+
+#### Grupo 3 — postgres-erp (BD ERP + CCTV)
+
+2 simulaciones atacan Postgres (mismo server, dos BD):
+
+| ID | Amenaza | Script | Controles |
+|---|---|---|---|
+| SW-06 | Inyección SQL PostgreSQL | `sqlmap -d postgresql://... --dump` + validar reglas WAF vs IoCs | A.8.15, A.8.24, A.8.20, A.5.7 |
+| IF-02 | Acceso a BD IP/contraseñas | SQLi + dump tablas credenciales sobre BD `postgres_cctv` | A.8.24, A.8.3 |
+
+**Script orquestador:** `lab/scripts/attacks/grupo3-postgres.sh`
+
+#### Grupo 4 — ldap-server (identidades)
+
+3 simulaciones atacan el LDAP:
+
+| ID | Amenaza | Script | Controles |
+|---|---|---|---|
+| HW-08+10 | Compromiso credenciales tablet + smartphone | `hydra -l user -P rockyou.txt ldap-server` + login anómala | A.6.7, A.8.24, A.8.1 |
+| SW-07 | Abuso VPN acceso interno | Reutilizar credenciales + test provisión/desactivación | A.8.1, A.8.15, A.8.5, A.5.16 |
+| SW-08 | Alteración registros asistencia | Modificar entrada LDAP de horario | A.8.1, A.8.15 |
+
+**Script orquestador:** `lab/scripts/attacks/grupo4-ldap.sh`
+
+#### Grupo 5 — minio (NAS + backups)
+
+2 simulaciones en Minio (pérdida backups + ransomware):
+
+| ID | Amenaza | Script | Controles |
+|---|---|---|---|
+| HW-05 | Pérdida irrecuperable backups | `simulate-ransomware.sh` (encrypta Minio) | A.8.13, A.8.14 |
+| IF-06 | Ransomware sobre backups | Script cifrado + validar RTO/RPO recuperación | A.8.13, A.8.22, A.5.30 |
+
+**Script orquestador:** `lab/scripts/attacks/grupo5-minio.sh`
+
+#### Grupo 6 — mariadb (inventario)
+
+1 simulación:
+
+| ID | Amenaza | Script | Controles |
+|---|---|---|---|
+| IF-09 | Alteración inventario stock | `UPDATE stock SET cantidad=0 WHERE id=X` | A.8.3, A.8.15 |
+
+**Script orquestador:** `lab/scripts/attacks/grupo6-mariadb.sh`
+
+#### Grupo 7 — mongodb (nómina)
+
+1 simulación:
+
+| ID | Amenaza | Script | Controles |
+|---|---|---|---|
+| IF-10 | Exposición nómina y cuentas | `mongodump` a MongoDB sin autenticación | A.8.11 |
+
+**Script orquestador:** `lab/scripts/attacks/grupo7-mongodb.sh`
+
+#### Grupo 8 — certbot (SSL/TLS)
+
+1 simulación:
+
+| ID | Amenaza | Script | Controles |
+|---|---|---|---|
+| IF-08 | Expiración SSL sin aviso | Detener renovación + mostrar error TLS | A.8.24, A.8.16 |
+
+**Script orquestador:** `lab/scripts/attacks/grupo8-certbot.sh`
+
+#### Grupo 9 — host Kali (ataques directos)
+
+3 simulaciones que se harán desde el propio host Kali (sin contenedor objetivo Docker):
+
+| ID | Amenaza | Script | Controles |
+|---|---|---|---|
+| IF-03 | Exfiltración biométrica | `curl` a API REST sin cifrado (simulado localmente) | A.5.34 |
+| IF-04 | Fraude facturación | `psql` directo a BD facturación sin MFA (Postgres ERP) | A.8.2 |
+| SW-10 + RH-06 | Suplantación M365 + Whaling | Script de phishing con Gophish desde host | A.5.23, A.8.5, A.6.3, A.5.3 |
+
+**Script orquestador:** `lab/scripts/attacks/grupo9-host-kali.sh`
+
+#### Grupo 10 — red Docker (VLAN hopping)
+
+1 simulación que ataca la red del propio laboratorio Docker:
+
+| ID | Amenaza | Script | Controles |
+|---|---|---|---|
+| HW-04 | VLAN hopping / salto VLAN | `macof` / `yersinia` simulado en red Docker | A.8.20, A.8.22 |
+
+**Script orquestador:** `lab/scripts/attacks/grupo10-red-docker.sh`
+
+#### Resumen de agrupación
+
+| Grupo | Contenedor objetivo | # simulaciones | Activos cubiertos |
+|---|---|---|---|
+| 1 | nginx-vuln | 7 | HW-02, HW-03, HW-07, HW-09, SW-04, SW-02, SW-05, IF-01, IF-07 |
+| 2 | odoo | 4 | HW-01, HW-06, SW-01, SW-03 |
+| 3 | postgres-erp | 2 | SW-06, IF-02 |
+| 4 | ldap-server | 3 | HW-08, HW-10, SW-07, SW-08 |
+| 5 | minio | 2 | HW-05, IF-06 |
+| 6 | mariadb | 1 | IF-09 |
+| 7 | mongodb | 1 | IF-10 |
+| 8 | certbot | 1 | IF-08 |
+| 9 | host Kali | 3 | IF-03, IF-04, SW-10, RH-06 |
+| 10 | red Docker | 1 | HW-04 |
+| **Total** | — | **~25 ejecuciones** | **50/50** |
 
 ### 3.4 Decisiones y Ajustes — Fase 1
 
@@ -236,6 +379,16 @@ Al completar todas las simulaciones, se genera un informe consolidado con:
 - Controles validados: Y/40
 - No conformidades detectadas: Z
 - Brechas críticas: W
+- SIEM usado: lightweight (logs en volumen compartido — limitación de RAM)
+
+## Limitaciones del Laboratorio
+- No se desplegó SIEM comercial (Elasticsearch + Kibana + Wazuh) por restricciones
+  de RAM (3.9 GB disponibles en host Kali). Se usó un SIEM lightweight basado en
+  volúmenes compartidos + scripts de revisión (`check-logs.sh`). La detección fue
+  post-procesada, no tiempo real. Recomendación: para producción desplegar Wazuh
+  + Elastic Stack en host con ≥8 GB RAM.
+- Kali-attacker corre en el host (no en contenedor). Las herramientas requeridas
+  (nmap, hydra, sqlmap, metasploit) deben estar instaladas en el host.
 
 ## Resultados por Categoría
 ### Hardware (10)
@@ -404,10 +557,11 @@ Métrica calculada desde los resultados del archivo vivo:
 
 | Fase | Total | ✅ Completadas | ⏳ Pendientes | ❌ Fallidas | Avance |
 |---|---|---|---|---|---|---|
-| Fase 1 — Docker Lab + Scripted | ~21 | 0 | 21 | 0 | 0% |
+| Fase 0 — Bootstrap | 1 | 1 | 0 | 0 | 100% |
+| Fase 1 — Docker Lab + Scripted (10 grupos) | ~10 scripts | 0 | 10 | 0 | 0% |
 | Fase 2 — Tabletop/Drills | ~12 | 0 | 12 | 0 | 0% |
 | Fase 3 — Informe | 1 | 0 | 1 | 0 | 0% |
-| **Total** | **~34** | **0** | **34** | **0** | **0%** |
+| **Total** | **~24 ejecuciones** | **1** | **23** | **0** | **4%** |
 
 ---
 
@@ -424,4 +578,4 @@ Métrica calculada desde los resultados del archivo vivo:
 ---
 
 *Última actualización: 2026-07-18*
-*Próxima acción: Iniciar Fase 1 — Desplegar docker-compose.yml del laboratorio (21 simulaciones técnicas)*
+*Próxima acción: Desplegar laboratorio con `cd lab && docker compose up -d` y ejecutar Grupo 1 (nginx-vuln — 7 simulaciones en una sola sesión)*
