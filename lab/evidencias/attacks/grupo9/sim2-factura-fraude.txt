@@ -1,0 +1,11 @@
+ERROR:  duplicate key value violates unique constraint "facturas_numero_key"
+DETAIL:  Key (numero)=(FRAUDE-99999) already exists.
+ id | cliente_id |    numero     |  total   |  estado   
+----+------------+---------------+----------+-----------
+ 11 |          3 | FRAUDE-99999  | 99999.00 | emitida
+ 10 |         10 | FAC-2026-0010 | 10304.00 | pendiente
+  9 |          9 | FAC-2026-0009 |  2016.00 | pendiente
+  8 |          8 | FAC-2026-0008 |  6048.00 | pagada
+  7 |          7 | FAC-2026-0007 |   750.40 | pendiente
+(5 rows)
+

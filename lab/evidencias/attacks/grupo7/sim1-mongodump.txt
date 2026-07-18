@@ -1,0 +1,1 @@
+/home/kali/SGSI/lab/scripts/attacks/grupo7-mongodb.sh: line 25: mongodump: command not found

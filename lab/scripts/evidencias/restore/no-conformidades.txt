@@ -1,0 +1,6 @@
+NC-RESTORE-01: Backup no encontrado en Minio — regla 3-2-1 no implementada
+NC-RESTORE-01: Backup no encontrado en Minio — regla 3-2-1 no implementada
+NC-RESTORE-01: Backup no encontrado en Minio — regla 3-2-1 no implementada
+NC-RESTORE-01: Backup no encontrado en Minio — regla 3-2-1 no implementada
+NC-RESTORE-01: Backup no encontrado en Minio — regla 3-2-1 no implementada
+NC-RESTORE-01: Backup no encontrado en Minio — regla 3-2-1 no implementada

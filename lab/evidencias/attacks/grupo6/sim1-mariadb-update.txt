@@ -1,0 +1,2 @@
+id	codigo	nombre	cantidad
+1	CAM-DS2CD2	Cámara IP Hikvision DS-2CD2T47G2-L	0

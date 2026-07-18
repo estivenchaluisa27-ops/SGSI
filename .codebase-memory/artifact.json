@@ -1,0 +1,11 @@
+{
+    "schema_version": 2,
+    "commit": "1f546a5e95949f7ec64a91cc05ff2ac0ad8b70d8",
+    "indexed_at": "2026-07-18T04:59:57Z",
+    "project": "SGSI",
+    "nodes": 334,
+    "edges": 331,
+    "original_size": 1310720,
+    "compressed_size": 34189,
+    "compression_level": 9
+}

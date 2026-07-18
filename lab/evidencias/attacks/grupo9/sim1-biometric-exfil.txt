@@ -1,0 +1,14 @@
+ id |         nombre         |  ip_address   | usuario |       contrasena        
+----+------------------------+---------------+---------+-------------------------
+  1 | Camara Bodega Norte    | 192.168.1.101 | admin   | cctv_pass_2026_bodega
+  2 | Camara Bodega Sur      | 192.168.1.102 | admin   | cctv_pass_2026_bodega
+  3 | Camara Showroom        | 192.168.1.103 | admin   | cctv_pass_2026_showroom
+  4 | Camara Caja            | 192.168.1.104 | admin   | cctv_pass_2026_showroom
+  5 | Camara Data Center     | 192.168.1.105 | admin   | cctv_pass_2026_dc
+  6 | Camara Recepcion       | 192.168.1.106 | admin   | cctv_pass_2026_oficinas
+  7 | Camara Gerencia        | 192.168.1.107 | admin   | cctv_pass_2026_oficinas
+  8 | Camara Estacionamiento | 192.168.1.108 | admin   | cctv_pass_2026_exterior
+  9 | Camara Puerta Trasera  | 192.168.1.109 | admin   | cctv_pass_2026_bodega
+ 10 | Camara Sucursal GYE    | 192.168.5.101 | admin   | cctv_pass_2026_gye
+(10 rows)
+

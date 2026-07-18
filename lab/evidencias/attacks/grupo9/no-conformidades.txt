@@ -1,0 +1,17 @@
+
+>>> SIM #1: HW-08 — Exfiltración datos biométricos (A.8.11)
+  ❌ Datos CCTV exportados desde host Kali — A.8.11 (exfiltración)
+
+>>> SIM #2: SW-10 — Fraude facturación (A.8.3, A.8.15, A.5.7)
+  Verificando transacciones fraudulentas...
+  ❌ Factura fraudulenta creada sin detección — A.8.3 (acceso no autorizado)
+
+>>> SIM #3: PH-01 — Phishing Gophish (A.8.7, A.8.24)
+  Gophish detectado — ejecutando simulación...
+  ❌ Campaña de phishing podría ser lanzada — A.8.7 (concienciación)
+
+
+=========================================
+ GRUPO 9 COMPLETADO — 3 simulaciones
+ Evidencias: /home/kali/SGSI/lab/evidencias/attacks/grupo9/
+=========================================

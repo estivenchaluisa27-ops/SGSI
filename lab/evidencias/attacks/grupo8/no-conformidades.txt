@@ -1,0 +1,10 @@
+
+>>> SIM #1: IF-08 — Expiración SSL sin aviso (A.8.24, A.8.16)
+  ❌ Error TLS detectado — certificado expirado/no encontrado
+  ❌ No hay monitoreo de expiración SSL — A.8.16
+
+
+=========================================
+ GRUPO 8 COMPLETADO
+ Evidencias: /home/kali/SGSI/lab/evidencias/attacks/grupo8/
+=========================================

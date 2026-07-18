@@ -71,8 +71,8 @@ services:
       POSTGRES_USER: ${POSTGRES_ERP_USER}
       POSTGRES_PASSWORD: ${POSTGRES_ERP_PASSWORD}
       POSTGRES_DB: ${POSTGRES_ERP_DB}
-      # Crea la BD de CCTV en la misma instancia
-      POSTGRES_MULTIPLE_DATABASES: ${POSTGRES_CCTV_DB}
+      # Crea BDs adicionales en la misma instancia (odoo_db + postgres_cctv)
+      POSTGRES_MULTIPLE_DATABASES: ${POSTGRES_MULTIPLE_DATABASES}
     ports:
       - "5432:5432"
     healthcheck:
@@ -95,13 +95,15 @@ services:
       - sgsi-logs:/var/log/nginx
       - ./data/nginx-ssl:/etc/nginx/ssl:ro
       - ./data/nginx-print:/var/www/print:ro
+      - ./data/nginx-auth:/etc/nginx/auth:ro
+      - ./data/nginx-repo:/var/www/repo:ro
     ports:
       - "80:80"
       - "443:443"
     depends_on:
       - odoo
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
+      test: ["CMD", "curl", "-sf", "http://localhost/", "-o", "/dev/null", "--max-time", "5"]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -140,13 +142,14 @@ services:
     networks: [sgsi-lab]
     volumes:
       - ldap-data:/var/lib/ldap
-      - ./data/ldap/seed:/container/service/slapd/assets/config/bootstrap/ldif/custom
       - sgsi-logs:/var/log
     environment:
       LDAP_ORGANISATION: ${LDAP_ORGANISATION}
       LDAP_DOMAIN: ${LDAP_DOMAIN}
       LDAP_ADMIN_PASSWORD: ${LDAP_ADMIN_PASSWORD}
       LDAP_BASE_DN: ${LDAP_BASE_DN}
+      LDAP_TLS: "false"
+      KEEP_EXISTING_CONFIG: "true"
     ports:
       - "389:389"
     healthcheck:
@@ -199,7 +202,7 @@ services:
     ports:
       - "27017:27017"
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')", "--quiet"]
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')", "--quiet"]
       interval: 30s
       timeout: 10s
       retries: 3

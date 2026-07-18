@@ -1,0 +1,10 @@
+
+>>> SIM #1: HW-04 — VLAN hopping / salto de segmento (A.8.20, A.8.22)
+  ❌ Contenedor atacante alcanzó Postgres en la misma red — A.8.22 (sin segmentación VLAN)
+  ❌ Tráfico entre Odoo y Postgres visible desde tercer contenedor en red bridge
+
+
+=========================================
+ GRUPO 10 COMPLETADO
+ Evidencias: /home/kali/SGSI/lab/evidencias/attacks/grupo10/
+=========================================

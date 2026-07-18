@@ -1,0 +1,17 @@
+Hydra v9.6 (c) 2023 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2026-07-18 12:36:41
+[DATA] max 10 tasks per 1 server, overall 10 tasks, 10 login tries (l:1/p:10), ~1 try per task
+[DATA] attacking http-get://localhost:80/admin/
+[80][http-get] host: localhost   misc: /admin/   login: admin   password: 123456
+[WARNING] Unusual return code: 500 for admin:admin123
+[WARNING] Unusual return code: 500 for admin:password123
+[WARNING] Unusual return code: 500 for admin:welcome
+[WARNING] Unusual return code: 500 for admin:sysadmin2026
+[WARNING] Unusual return code: 500 for admin:Passw0rd123
+[WARNING] Unusual return code: 500 for admin:tecnoglobal
+[80][http-get] host: localhost   misc: /admin/   login: admin   password: letmein
+[80][http-get] host: localhost   misc: /admin/   login: admin   password: admin
+[80][http-get] host: localhost   misc: /admin/   login: admin   password: TecnoGlobal2026!
+1 of 1 target successfully completed, 4 valid passwords found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2026-07-18 12:36:43

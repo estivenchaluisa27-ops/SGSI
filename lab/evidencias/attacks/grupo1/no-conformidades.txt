@@ -1,0 +1,28 @@
+
+>>> SIM #1: HW-02+03 — Compromiso perimetral (A.8.20, A.8.22, A.8.5, A.5.7)
+    RESULTADO: ⚠️  Pendiente de verificación (revisar puertos expuestos vs feed IoCs)
+
+>>> SIM #2: HW-07 — Borrado grabaciones NVR (A.8.13, A.8.15, A.8.5)
+    RESULTADO: ⚠️  Pendiente — verificar con check-logs.sh si DELETE fue posible sin auth
+
+>>> SIM #3: HW-09 — Fuga datos impresora (A.8.24)
+    RESULTADO: ⚠️  Pendiente — verificar si /print/ expuso documentos sin auth
+
+>>> SIM #4: SW-04 — Fuerza bruta RDP simulado (A.8.15, A.8.24, A.8.5, A.5.17)
+    RESULTADO: ⚠️  Pendiente — verificar si hydra encontró credenciales
+
+>>> SIM #5: SW-02+05 — Intercepción video + exposición API (A.5.23, A.8.5)
+    RESULTADO: ⚠️  Pendiente — verificar si API token fue expuesta
+
+>>> SIM #6: IF-01 — Fuga planos seguridad (A.5.12, A.8.3)
+  ❌ Descarga exitosa sin autenticación — A.8.3 (ACL no implementado)
+
+>>> SIM #7: IF-07 — Borrado logs VPN (A.8.15)
+    RESULTADO: ⚠️  Pendiente — verificar con check-logs.sh si DELETE fue posible
+
+>>> POST-SIM: Revisión SIEM lightweight
+
+=========================================
+ GRUPO 1 COMPLETADO — 7 simulaciones
+ Evidencias: /home/kali/SGSI/lab/evidencias/attacks/grupo1/
+=========================================

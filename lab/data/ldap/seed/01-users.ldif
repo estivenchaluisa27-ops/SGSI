@@ -1,0 +1,84 @@
+dn: ou=people,dc=tecnoglobal,dc=local
+objectClass: organizationalUnit
+ou: people
+
+dn: ou=groups,dc=tecnoglobal,dc=local
+objectClass: organizationalUnit
+ou: groups
+
+dn: cn=sysadmin,ou=groups,dc=tecnoglobal,dc=local
+objectClass: groupOfNames
+cn: sysadmin
+member: cn=cmartinez,ou=people,dc=tecnoglobal,dc=local
+
+dn: cn=jperez,ou=people,dc=tecnoglobal,dc=local
+objectClass: inetOrgPerson
+cn: jperez
+sn: Perez
+uid: jperez
+mail: jperez@tecnoglobal.ec
+userPassword: TecnoGlobal2026!
+employeeNumber: EMP001
+
+dn: cn=lrodriguez,ou=people,dc=tecnoglobal,dc=local
+objectClass: inetOrgPerson
+cn: lrodriguez
+sn: Rodriguez
+uid: lrodriguez
+mail: lrodriguez@tecnoglobal.ec
+userPassword: TI2026!Admin
+employeeNumber: EMP002
+
+dn: cn=cmartinez,ou=people,dc=tecnoglobal,dc=local
+objectClass: inetOrgPerson
+cn: cmartinez
+sn: Martinez
+uid: cmartinez
+mail: cmartinez@tecnoglobal.ec
+userPassword: Sysadmin2026!
+employeeNumber: EMP003
+
+dn: cn=dtorres,ou=people,dc=tecnoglobal,dc=local
+objectClass: inetOrgPerson
+cn: dtorres
+sn: Torres
+uid: dtorres
+mail: dtorres@tecnoglobal.ec
+userPassword: Passw0rd123
+employeeNumber: EMP004
+
+dn: cn=rramirez,ou=people,dc=tecnoglobal,dc=local
+objectClass: inetOrgPerson
+cn: rramirez
+sn: Ramirez
+uid: rramirez
+mail: rramirez@tecnoglobal.ec
+userPassword: Conta2026\$ec
+employeeNumber: EMP005
+
+dn: cn=gvega,ou=people,dc=tecnoglobal,dc=local
+objectClass: inetOrgPerson
+cn: gvega
+sn: Vega
+uid: gvega
+mail: gvega@tecnoglobal.ec
+userPassword: Bodega2026!
+employeeNumber: EMP006
+
+dn: cn=msanchez,ou=people,dc=tecnoglobal,dc=local
+objectClass: inetOrgPerson
+cn: msanchez
+sn: Sanchez
+uid: msanchez
+mail: msanchez@tecnoglobal.ec
+userPassword: Soporte2026!
+employeeNumber: EMP008
+
+dn: cn=avargas,ou=people,dc=tecnoglobal,dc=local
+objectClass: inetOrgPerson
+cn: avargas
+sn: Vargas
+uid: avargas
+mail: avargas@tecnoglobal.ec
+userPassword: Recepcion2026!
+employeeNumber: EMP009

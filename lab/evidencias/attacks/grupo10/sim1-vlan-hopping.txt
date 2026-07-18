@@ -1,0 +1,12 @@
+Unable to find image 'alpine:latest' locally
+latest: Pulling from library/alpine
+55afa1ecc21d: Already exists
+Digest: sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+Status: Downloaded newer image for alpine:latest
+PING sgsi-postgres (172.28.0.2): 56 data bytes
+64 bytes from 172.28.0.2: seq=0 ttl=64 time=0.578 ms
+64 bytes from 172.28.0.2: seq=1 ttl=64 time=0.073 ms
+
+--- sgsi-postgres ping statistics ---
+2 packets transmitted, 2 packets received, 0% packet loss
+round-trip min/avg/max = 0.073/0.325/0.578 ms

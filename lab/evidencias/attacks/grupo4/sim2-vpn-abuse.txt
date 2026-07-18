@@ -1,0 +1,75 @@
+# extended LDIF
+#
+# LDAPv3
+# base <dc=tecnoglobal,dc=local> with scope subtree
+# filter: (objectclass=*)
+# requesting: cn uid employeeNumber 
+#
+
+# tecnoglobal.local
+dn: dc=tecnoglobal,dc=local
+
+# people, tecnoglobal.local
+dn: ou=people,dc=tecnoglobal,dc=local
+
+# groups, tecnoglobal.local
+dn: ou=groups,dc=tecnoglobal,dc=local
+
+# sysadmin, groups, tecnoglobal.local
+dn: cn=sysadmin,ou=groups,dc=tecnoglobal,dc=local
+cn: sysadmin
+
+# jperez, people, tecnoglobal.local
+dn: cn=jperez,ou=people,dc=tecnoglobal,dc=local
+cn: jperez
+uid: jperez
+employeeNumber: EMP001
+
+# lrodriguez, people, tecnoglobal.local
+dn: cn=lrodriguez,ou=people,dc=tecnoglobal,dc=local
+cn: lrodriguez
+uid: lrodriguez
+employeeNumber: EMP002
+
+# cmartinez, people, tecnoglobal.local
+dn: cn=cmartinez,ou=people,dc=tecnoglobal,dc=local
+cn: cmartinez
+uid: cmartinez
+employeeNumber: EMP003
+
+# dtorres, people, tecnoglobal.local
+dn: cn=dtorres,ou=people,dc=tecnoglobal,dc=local
+cn: dtorres
+uid: dtorres
+employeeNumber: EMP004
+
+# rramirez, people, tecnoglobal.local
+dn: cn=rramirez,ou=people,dc=tecnoglobal,dc=local
+cn: rramirez
+uid: rramirez
+employeeNumber: EMP005
+
+# gvega, people, tecnoglobal.local
+dn: cn=gvega,ou=people,dc=tecnoglobal,dc=local
+cn: gvega
+uid: gvega
+employeeNumber: EMP006
+
+# msanchez, people, tecnoglobal.local
+dn: cn=msanchez,ou=people,dc=tecnoglobal,dc=local
+cn: msanchez
+uid: msanchez
+employeeNumber: EMP008
+
+# avargas, people, tecnoglobal.local
+dn: cn=avargas,ou=people,dc=tecnoglobal,dc=local
+cn: avargas
+uid: avargas
+employeeNumber: EMP009
+
+# search result
+search: 2
+result: 0 Success
+
+# numResponses: 13
+# numEntries: 12

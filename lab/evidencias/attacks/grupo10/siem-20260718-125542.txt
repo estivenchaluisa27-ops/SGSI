@@ -1,0 +1,7 @@
+==============================================
+  SGSI - SIEM Lightweight - Revisión de Logs
+  Fecha: 2026-07-18 12:55:42
+==============================================
+
+❌ Volumen sgsi-logs no encontrado.
+   ¿Está el laboratorio levantado? Ejecuta: docker compose up -d

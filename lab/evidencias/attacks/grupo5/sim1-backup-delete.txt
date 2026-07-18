@@ -1,0 +1,3 @@
+Added `local` successfully.
+Removed `local/backups/odoo_db-20260718-125102.sql.gz`.
+Removed `local/backups/postgres_cctv-20260718-125102.sql.gz`.

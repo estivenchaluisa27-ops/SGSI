@@ -1,0 +1,9 @@
+
+>>> SIM #1: IF-09 — Alteración inventario stock (A.8.3, A.8.15)
+  ❌ UPDATE ejecutado sin registro de auditoría — A.8.15 (logging)
+
+
+=========================================
+ GRUPO 6 COMPLETADO
+ Evidencias: /home/kali/SGSI/lab/evidencias/attacks/grupo6/
+=========================================

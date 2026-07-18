@@ -1,0 +1,62 @@
+# extended LDIF
+#
+# LDAPv3
+# base <dc=tecnoglobal,dc=local> with scope subtree
+# filter: (uid=*)
+# requesting: cn uid mail 
+#
+
+# jperez, people, tecnoglobal.local
+dn: cn=jperez,ou=people,dc=tecnoglobal,dc=local
+cn: jperez
+uid: jperez
+mail: jperez@tecnoglobal.ec
+
+# lrodriguez, people, tecnoglobal.local
+dn: cn=lrodriguez,ou=people,dc=tecnoglobal,dc=local
+cn: lrodriguez
+uid: lrodriguez
+mail: lrodriguez@tecnoglobal.ec
+
+# cmartinez, people, tecnoglobal.local
+dn: cn=cmartinez,ou=people,dc=tecnoglobal,dc=local
+cn: cmartinez
+uid: cmartinez
+mail: cmartinez@tecnoglobal.ec
+
+# dtorres, people, tecnoglobal.local
+dn: cn=dtorres,ou=people,dc=tecnoglobal,dc=local
+cn: dtorres
+uid: dtorres
+mail: dtorres@tecnoglobal.ec
+
+# rramirez, people, tecnoglobal.local
+dn: cn=rramirez,ou=people,dc=tecnoglobal,dc=local
+cn: rramirez
+uid: rramirez
+mail: rramirez@tecnoglobal.ec
+
+# gvega, people, tecnoglobal.local
+dn: cn=gvega,ou=people,dc=tecnoglobal,dc=local
+cn: gvega
+uid: gvega
+mail: gvega@tecnoglobal.ec
+
+# msanchez, people, tecnoglobal.local
+dn: cn=msanchez,ou=people,dc=tecnoglobal,dc=local
+cn: msanchez
+uid: msanchez
+mail: msanchez@tecnoglobal.ec
+
+# avargas, people, tecnoglobal.local
+dn: cn=avargas,ou=people,dc=tecnoglobal,dc=local
+cn: avargas
+uid: avargas
+mail: avargas@tecnoglobal.ec
+
+# search result
+search: 2
+result: 0 Success
+
+# numResponses: 9
+# numEntries: 8

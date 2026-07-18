@@ -1,0 +1,9 @@
+
+>>> SIM #1: IF-10 — Exposición nómina y cuentas bancarias (A.8.11)
+  ✅ MongoDB requiere autenticación — dump bloqueado
+
+
+=========================================
+ GRUPO 7 COMPLETADO
+ Evidencias: /home/kali/SGSI/lab/evidencias/attacks/grupo7/
+=========================================

@@ -1,0 +1,2 @@
+  RTO real: 6s
+  RPO objetivo: 1h (simulado)

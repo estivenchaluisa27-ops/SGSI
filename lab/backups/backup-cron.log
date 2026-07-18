@@ -1,0 +1,20 @@
+[2026-07-18 12:51:02] Iniciando backup...
+  Odoo DB dump: odoo_db-20260718-125102.sql.gz (4018 bytes)
+  CCTV DB dump: postgres_cctv-20260718-125102.sql.gz (1822 bytes)
+/home/kali/SGSI/lab/scripts/backup-cron.sh: line 32: mc: command not found
+/home/kali/SGSI/lab/scripts/backup-cron.sh: line 33: mc: command not found
+  Subido a Minio bucket 'backups'
+[2026-07-18 12:51:03] Backup completado.
+---
+[2026-07-18 13:01:49] Iniciando backup...
+  Odoo DB dump: odoo_db-20260718-130149.sql.gz (4014 bytes)
+  CCTV DB dump: postgres_cctv-20260718-130149.sql.gz (1822 bytes)
+  Subido a Minio bucket 'backups'
+[2026-07-18 13:01:51] Backup completado.
+---
+[2026-07-18 13:14:18] Iniciando backup...
+  Odoo DB dump: odoo_db-20260718-131418.sql.gz (4060 bytes)
+  CCTV DB dump: postgres_cctv-20260718-131418.sql.gz (1824 bytes)
+  Subido a Minio bucket 'backups'
+[2026-07-18 13:14:20] Backup completado.
+---

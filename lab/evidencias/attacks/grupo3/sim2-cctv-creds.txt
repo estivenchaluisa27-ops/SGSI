@@ -1,0 +1,9 @@
+ id |       nombre        |  ip_address   | usuario |       contrasena        
+----+---------------------+---------------+---------+-------------------------
+  1 | Camara Bodega Norte | 192.168.1.101 | admin   | cctv_pass_2026_bodega
+  2 | Camara Bodega Sur   | 192.168.1.102 | admin   | cctv_pass_2026_bodega
+  3 | Camara Showroom     | 192.168.1.103 | admin   | cctv_pass_2026_showroom
+  4 | Camara Caja         | 192.168.1.104 | admin   | cctv_pass_2026_showroom
+  5 | Camara Data Center  | 192.168.1.105 | admin   | cctv_pass_2026_dc
+(5 rows)
+

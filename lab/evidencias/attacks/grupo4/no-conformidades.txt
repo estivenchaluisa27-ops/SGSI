@@ -1,0 +1,17 @@
+
+>>> SIM #1: HW-08+10 — Compromiso credenciales móviles (A.6.7, A.8.24, A.8.1)
+  Usuarios enumerados via LDAP: 8
+  ❌ LDAP permite enumeración anónima — A.8.24 (datos expuestos)
+
+>>> SIM #2: SW-07 — Abuso VPN acceso interno (A.8.1, A.8.15, A.8.5, A.5.16)
+  (Simulado — depende de políticas de aprovisionamiento)
+    RESULTADO: ⚠️  Pendiente — revisar si cuentas desactivadas siguen accediendo
+
+>>> SIM #3: SW-08 — Alteración registros asistencia (A.8.1, A.8.15)
+    RESULTADO: ⚠️  Pendiente — verificar si modificación fue posible sin ACL de escritura
+
+
+=========================================
+ GRUPO 4 COMPLETADO — 3 simulaciones
+ Evidencias: /home/kali/SGSI/lab/evidencias/attacks/grupo4/
+=========================================

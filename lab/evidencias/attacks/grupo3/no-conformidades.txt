@@ -1,0 +1,12 @@
+
+>>> SIM #1: SW-06 — Inyección SQL PostgreSQL (A.8.15, A.8.24, A.8.20, A.5.7)
+  ✅ SQLi no logró extraer datos — controles protegen
+
+>>> SIM #2: IF-02 — Acceso BD contraseñas CCTV (A.8.24, A.8.3)
+  ❌ Acceso a BD CCTV sin autorización específica — A.8.3
+
+
+=========================================
+ GRUPO 3 COMPLETADO — 2 simulaciones
+ Evidencias: /home/kali/SGSI/lab/evidencias/attacks/grupo3/
+=========================================

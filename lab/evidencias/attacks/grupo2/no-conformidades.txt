@@ -1,0 +1,19 @@
+
+>>> SIM #1: HW-01 — Fallo crítico hardware ERP (A.8.13, A.8.14, A.5.30)
+  ✅ RTO dentro del objetivo (6s < 14400s)
+
+>>> SIM #2: HW-06 — Robo laptop gerencia (A.6.7, A.8.24, A.8.7)
+  ✅ Login desde IP externa bloqueado o requiere MFA
+
+>>> SIM #3: SW-01 — Acceso no autorizado ERP (A.8.15, A.8.24, A.8.5)
+  ✅ No se detectó inyección SQL
+
+>>> SIM #4: SW-03 — Fuga planos AutoCAD (A.8.1, A.8.15)
+  ✅ Acceso denegado (código 000)
+
+>>> POST-SIM: Revisión SIEM
+
+=========================================
+ GRUPO 2 COMPLETADO — 4 simulaciones
+ Evidencias: /home/kali/SGSI/lab/evidencias/attacks/grupo2/
+=========================================

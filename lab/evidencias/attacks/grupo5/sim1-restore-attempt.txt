@@ -1,0 +1,8 @@
+=========================================
+ Restore Backup — Odoo desde Minio
+ Fecha: 2026-07-18 13:01:28
+=========================================
+>>> Verificando backups en Minio...
+  ⚠️  No hay backup en Minio — simulando restauración fallida
+  ❌ No conformidad: backup no disponible (A.8.14 redundancia)
+RTO: 0s (objetivo: <14400s)

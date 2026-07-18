@@ -1,0 +1,12 @@
+
+>>> SIM #1: HW-05 — Pérdida backups (A.8.13, A.8.14)
+  ❌ Restauración fallida — A.8.14 (redundancia no implementada)
+
+>>> SIM #2: IF-06 — Ransomware sobre backups (A.8.13, A.8.22, A.5.30)
+  ❌ Ransomware exitoso — A.8.22 (segregación no implementada)
+
+
+=========================================
+ GRUPO 5 COMPLETADO — 2 simulaciones
+ Evidencias: /home/kali/SGSI/lab/evidencias/attacks/grupo5/
+=========================================

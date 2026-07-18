@@ -1,0 +1,35 @@
+=========================================
+ Simulación Ransomware — Minio (IF-06)
+ Fecha: 2026-07-18 13:01:28
+=========================================
+Added `local` successfully.
+/bin/sh: line 1: grep: command not found
+>>> Creando datos de muestra en backups...
+Added `local` successfully.
+ 0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  0 B / ?  39 B / ?  5 B/s39 bytes -> `local/backups/odoo/odoo_db.sql`
+Added `local` successfully.
+ 0 B / ? 32 bytes -> `local/backups/odoo/cctv_config.tar.gz`
+Added `local` successfully.
+ 0 B / ? 32 bytes -> `local/backups/ldap_users.ldif`
+>>> Ejecutando cifrado ransomware simulado...
+  Cifrando: ldap_users.ldif
+Added `local` successfully.
+ 0 B / ? 30 bytes -> `local/backups/ldap_users.ldif`
+  Cifrando: odoo/cctv_config.tar.gz
+Added `local` successfully.
+ 0 B / ? 30 bytes -> `local/backups/odoo/cctv_config.tar.gz`
+  Cifrando: odoo/odoo_db.sql
+Added `local` successfully.
+ 0 B / ? 30 bytes -> `local/backups/odoo/odoo_db.sql`
+Added `local` successfully.
+ 0 B / ? 130 bytes -> `local/backups/RESCATE_LEEME.txt`
+
+>>> RESULTADO: 3 objetos cifrados
+
+>>> Iniciando recuperación desde copia externa...
+  (Simulado: no hay copia externa — regla 3-2-1)
+=========================================
+ Ransomware completado
+ Objetos cifrados: 3
+ Evidencias: /home/kali/SGSI/lab/evidencias/attacks/ransomware/
+=========================================
